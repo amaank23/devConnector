@@ -5,6 +5,8 @@ import Spinner from '../layout/Spinner'
 import { getCurrentProfile } from '../../actions/profile'
 import { Link } from 'react-router-dom'
 import DashboardActions from './DashboardActions'
+import Experience from '../Experience/Experience'
+import Education from '../Education/Education'
 
 function Dashboard({ getCurrentProfile, auth: { user }, profile: { profile, loading } }) {
     const [haveProfile, setHaveProfile] = useState(false);
@@ -18,7 +20,13 @@ function Dashboard({ getCurrentProfile, auth: { user }, profile: { profile, load
         <i className="fas fa-user"></i>
         Welcome { user && user.name }
         </p>
-        { profile !== null ? (<DashboardActions />) : (<Fragment>
+        { profile !== null ? (
+        <Fragment>
+            <DashboardActions />
+            <Experience experience={profile.experience} />
+            <Education education={profile.education} />
+        </Fragment>
+        ) : (<Fragment>
             <p>You have not yet setup a Profile, please add some info</p>
             <Link to="create-profile" className="btn btn-primary my-1">Create Profile</Link>
         </Fragment>) }

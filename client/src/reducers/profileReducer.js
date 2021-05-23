@@ -1,4 +1,4 @@
-import { CLEAR_PROFILE, GET_PROFILE, PROFILE_ERROR, ADD_EXPERIENCE } from "../actions/types";
+import { CLEAR_PROFILE, GET_PROFILE, PROFILE_ERROR, ADD_EXPERIENCE, DELETE_EXPERIENCE, ADD_EDUCATION, DELETE_EDUCATION } from "../actions/types";
 
 const initialState = {
     profile: null,
@@ -14,6 +14,9 @@ export default function profileReducer(state = initialState, action) {
     switch (type) {
         case GET_PROFILE:
         case ADD_EXPERIENCE:
+        case DELETE_EXPERIENCE:
+        case ADD_EDUCATION:
+        case DELETE_EDUCATION:
             return {
                 ...state,
                 profile: payload,

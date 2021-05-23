@@ -11,9 +11,10 @@ import { loadUser } from './actions/auth';
 import setAuthToken from './utils/setAuthToken';
 import store from './store';
 import './App.css';
-import CreateProfile from './components/profile-form/CreateProfile';
-import EditProfile from './components/profile-form/EditProfile';
-import AddExperience from './components/experience-form/AddExperience'
+import CreateProfile from './components/Profile/CreateProfile';
+import EditProfile from './components/Profile/EditProfile';
+import AddExperience from './components/Experience/AddExperience'
+import AddEducation from './components/Education/AddEducation';
 
 if(localStorage.token){
   setAuthToken(localStorage.token);
@@ -43,6 +44,7 @@ function App() {
             <PrivateRoute path="/create-profile" component={CreateProfile} />
             <PrivateRoute path="/edit-profile" component={EditProfile} />
             <PrivateRoute path="/add-experience" component={AddExperience} />
+            <PrivateRoute path="/add-education" component={AddEducation} />
           </div>
         </Switch>
         
