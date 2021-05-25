@@ -33,11 +33,14 @@ function App() {
             <Landing />
           </Route>
           <div className="container">
-          <Alert />
+            <Alert />
             <Route path="/login">
               <Login />
             </Route>
             <Route path="/register">
+              <Register />
+            </Route>
+            <Route path="/profile/{id}">
               <Register />
             </Route>
             <PrivateRoute path="/dashboard" component={Dashboard} />
