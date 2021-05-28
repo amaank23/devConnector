@@ -1,41 +1,45 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
-function PostContainer({ name, text, date, comments }) {
+function PostContainer({ id, name, text, date, comments, likePost, likes, unlikePost, deletePost, user_id, authUser }) {
     return (
-            <div class="post bg-white p-1 my-1">
+            <div className="post bg-white p-1 my-1">
                 <div>
-                    <a href="profile.html">
-                    <img
-                        class="round-img"
-                        src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"
-                        alt=""
-                    />
-                    <h4>{name}</h4>
-                    </a>
+                    <Link to={`/post/${id}`}>
+                        <img
+                            className="round-img"
+                            src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"
+                            alt=""
+                        />
+                        <h4>{name}</h4>
+                    </Link>
                 </div>
                 <div>
-                    <p class="my-1">
+                    <p className="my-1">
                     {text}
                     </p>
-                    <p class="post-date">
+                    <p className="post-date">
                         Posted on {date.split('T')[0]}
                     </p>
-                    <button type="button" class="btn btn-light">
-                    <i class="fas fa-thumbs-up"></i>
-                    <span>4</span>
+                    <button type="button" className="btn btn-light" onClick={() => likePost(id)}>
+                    <i className="fas fa-thumbs-up"></i>
+                    <span>{likes.length}</span>
                     </button>
-                    <button type="button" class="btn btn-light">
-                    <i class="fas fa-thumbs-down"></i>
+                    <button type="button" className="btn btn-light"onClick={() => unlikePost(id)}>
+                    <i className="fas fa-thumbs-down"></i>
                     </button>
-                    <a href="post.html" class="btn btn-primary">
-                    Discussion <span class='comment-count'>{comments.length}</span>
-                    </a>
+                    <Link to={`/post/${id}`} className='btn btn-primary'>
+                        Discussion <span className='comment-count'>{comments.length}</span>
+                    </Link>
+                    
+                    {authUser.isAuthenticated && authUser.user._id === user_id && 
                     <button      
                     type="button"
-                    class="btn btn-danger"
+                    className="btn btn-danger"
+                    onClick={() => deletePost(id)}
                 >
-                    <i class="fas fa-times"></i>
-                </button>
+                    <i className="fas fa-times"></i>
+                </button>}
                 </div>
             </div>
     )

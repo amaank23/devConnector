@@ -1,18 +1,23 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { getPosts } from '../../actions/post';
+import { addPosts, getPosts, likePost, unLikePost, deletePost } from '../../actions/post';
 import PostContainer from './PostContainer';
 
 
-function Posts({ getPosts, posts }) {
+function Posts({ getPosts, posts, addPosts, likePost, unLikePost, deletePost, authUser }) {
     const [post, setPost] = useState('');
 
     function handleSubmit(e){
         e.preventDefault();
+        const formData = {
+            'text': post
+        }
+        addPosts(formData);
+        setPost('');
     }
 
     useEffect(() => {
-        getPosts();
+        getPosts(post);
     }, [getPosts])
 
     return (
@@ -44,7 +49,18 @@ function Posts({ getPosts, posts }) {
                     posts.map(post => {
                         return (
                             <Fragment>
-                                <PostContainer name={post.name} text={post.text} date={post.text} comments={post.comments} />
+                                <PostContainer id={post._id}
+                                 name={post.name}
+                                 text={post.text} 
+                                 date={post.date} 
+                                 comments={post.comments} 
+                                 likePost={likePost} 
+                                 likes={post.likes} 
+                                 unlikePost={unLikePost} 
+                                 deletePost={deletePost} 
+                                 user_id={post.user}
+                                 authUser={authUser}
+                                 />
                             </Fragment>
                         )
                     })
@@ -55,7 +71,8 @@ function Posts({ getPosts, posts }) {
 }
 
 const mapStateToProps = state => ({
-    posts: state.posts.posts
+    posts: state.posts.posts,
+    authUser: state.auth
 })
 
-export default connect(mapStateToProps, {getPosts})(Posts)
+export default connect(mapStateToProps, {getPosts, addPosts, likePost, unLikePost, deletePost})(Posts)
