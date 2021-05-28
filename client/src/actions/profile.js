@@ -8,7 +8,9 @@ import {
     ADD_EXPERIENCE,
     DELETE_EXPERIENCE,
     ADD_EDUCATION,
-    DELETE_EDUCATION
+    DELETE_EDUCATION,
+    GET_PROFILES,
+    CLEAR_PROFILE
 } from './types'
 
 // GET CURRENT USER PROFILE
@@ -166,6 +168,55 @@ export const deleteEducation = (id) => {
                 payload: res.data
             });
             console.log(res.data);
+        } catch (err) {
+            const errors = err.response.data.errors;
+
+            if(errors){
+                errors.forEach(error => dispatch( setAlert(error.msg, 'danger') ));
+            }
+            dispatch({
+                type: PROFILE_ERROR,
+                payload: { msg: err.response.statusText, status: err.response.status }
+            })
+        }
+    }
+}
+
+// GET ALL USERS PROFILE
+export const getAllProfiles = () => {
+    return async dispatch => {
+        try {
+            const res = await axios.get('/api/profile');
+            dispatch({
+                type: GET_PROFILES,
+                payload: res.data
+            });
+            dispatch({
+                type: CLEAR_PROFILE
+            });
+        } catch(err) {
+            const errors = err.response.data.errors;
+
+            if(errors){
+                errors.forEach(error => dispatch( setAlert(error.msg, 'danger') ));
+            }
+            dispatch({
+                type: PROFILE_ERROR,
+                payload: { msg: err.response.statusText, status: err.response.status }
+            })
+        }
+    }
+}
+
+// GELL PROFILES BY USER ID
+export const getProfileByUserId = (id) => {
+    return async dispatch => {
+        try {
+            const res = await axios.get(`/api/profile/user/${id}`);
+            dispatch({
+                type: GET_PROFILE,
+                payload: res.data
+            })
         } catch (err) {
             const errors = err.response.data.errors;
 

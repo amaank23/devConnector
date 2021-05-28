@@ -1,11 +1,21 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { useParams } from 'react-router';
+import { Link } from 'react-router-dom';
+import { getProfileByUserId } from '../../actions/profile';
+import Spinner from '../layout/Spinner';
 
 
-function Profile() {
-    return (
+function Profile({ getProfileByUserId, profile, auth: { isAuthenticated, user } }) {
+    const {id} = useParams();
+    useEffect(() => {
+        getProfileByUserId(id);
+    }, [getProfileByUserId])
+    console.log(profile);
+    return profile !== null ? (
         <Fragment>
-            <a href="profiles.html" className="btn btn-light">Back To Profiles</a>
+            <Link to="/developers" className="btn btn-light">Back To Profiles</Link>
+            {isAuthenticated && user !== null && user._id == profile.user._id && ( <Link to="/edit-profile" className="btn btn-primary">Edit Profile</Link> )}
 
             <div className="profile-grid my-1">
             {/* <!-- Top --> */}
@@ -15,9 +25,9 @@ function Profile() {
                 src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"
                 alt=""
                 />
-                <h1 className="large">John Doe</h1>
-                <p className="lead">Developer at Microsoft</p>
-                <p>Seattle, WA</p>
+                <h1 className="large">{profile.user.name}</h1>
+                <p className="lead">Developer at {profile.company}</p>
+                <p>{profile.location}</p>
                 <div className="icons my-1">
                 <a href="#" target="_blank" rel="noopener noreferrer">
                     <i className="fas fa-globe fa-2x"></i>
@@ -42,110 +52,75 @@ function Profile() {
 
             {/* <!-- About --> */}
             <div className="profile-about bg-light p-2">
-                <h2 className="text-primary">John's Bio</h2>
+                <h2 className="text-primary">{profile.user.name.split(' ')[0]}'s Bio</h2>
                 <p>
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sed
-                doloremque nesciunt, repellendus nostrum deleniti recusandae nobis
-                neque modi perspiciatis similique?
+                { 'bio' in profile ? profile.bio : 'No Bio Available'}
                 </p>
                 <div className="line"></div>
                 <h2 className="text-primary">Skill Set</h2>
                 <div className="skills">
-                <div className="p-1"><i className="fa fa-check"></i> HTML</div>
-                <div className="p-1"><i className="fa fa-check"></i> CSS</div>
-                <div className="p-1"><i className="fa fa-check"></i> JavaScript</div>
-                <div className="p-1"><i className="fa fa-check"></i> Python</div>
-                <div className="p-1"><i className="fa fa-check"></i> C#</div>
+                {profile.skills.length > 0 ? profile.skills.map((skill, index) => {
+                                    return (
+                                        <div className="p-1" key={index}><i className="fa fa-check"></i> {skill}</div>
+                                    )
+                                }) : '' }
                 </div>
             </div>
 
             {/* <!-- Experience --> */}
             <div className="profile-exp bg-white p-2">
                 <h2 className="text-primary">Experience</h2>
-                <div>
-                <h3 className="text-dark">Microsoft</h3>
-                <p>Oct 2011 - Current</p>
-                <p><strong>Position: </strong>Senior Developer</p>
-                <p>
-                    <strong>Description: </strong>Lorem ipsum dolor sit amet
-                    consectetur adipisicing elit. Dignissimos placeat, dolorum ullam
-                    ipsam, sapiente suscipit dicta eius velit amet aspernatur
-                    asperiores modi quidem expedita fugit.
-                </p>
-                </div>
-                <div>
-                <h3 className="text-dark">Sun Microsystems</h3>
-                <p>Nov 2004 - Nov 2011</p>
-                <p><strong>Position: </strong>Systems Admin</p>
-                <p>
-                    <strong>Description: </strong>Lorem ipsum dolor sit amet
-                    consectetur adipisicing elit. Dignissimos placeat, dolorum ullam
-                    ipsam, sapiente suscipit dicta eius velit amet aspernatur
-                    asperiores modi quidem expedita fugit.
-                </p>
-                </div>
+                {profile.experience.length > 0 ? profile.experience.map(exp => {
+                    return (
+                        <div key={exp._id}>
+                            <h3 className="text-dark">{exp.company}</h3>
+                            <p>{exp.from.split('T')[0]} - {exp.current ? 'Current' : exp.to.split('T')[0]}</p>
+                            <p><strong>Position: </strong>{exp.title}</p>
+                            <p>
+                                {exp.description !== '' ? (
+                                    <Fragment>
+                                        <strong>Description: </strong>{exp.description}
+                                    </Fragment>
+                                    
+                                ) : 'No Description Available'}
+                                
+                            </p>
+                        </div>
+                    )
+                }) : 'No Experience Available'}
             </div>
 
             {/* <!-- Education --> */}
             <div className="profile-edu bg-white p-2">
                 <h2 className="text-primary">Education</h2>
-                <div>
-                <h3>University Of Washington</h3>
-                <p>Sep 1993 - June 1999</p>
-                <p><strong>Degree: </strong>Masters</p>
-                <p><strong>Field Of Study: </strong>Computer Science</p>
-                <p>
-                    <strong>Description: </strong>Lorem ipsum dolor sit amet
-                    consectetur adipisicing elit. Dignissimos placeat, dolorum ullam
-                    ipsam, sapiente suscipit dicta eius velit amet aspernatur
-                    asperiores modi quidem expedita fugit.
-                </p>
-                </div>
-            </div>
-
-            {/* <!-- Github --> */}
-            <div className="profile-github">
-                <h2 className="text-primary my-1">
-                <i className="fab fa-github"></i> Github Repos
-                </h2>
-                <div className="repo bg-white p-1 my-1">
-                <div>
-                    <h4><a href="#" target="_blank"
-                        rel="noopener noreferrer">Repo One</a></h4>
-                    <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Repellat, laborum!
-                    </p>
-                </div>
-                <div>
-                    <ul>
-                    <li className="badge badge-primary">Stars: 44</li>
-                    <li className="badge badge-dark">Watchers: 21</li>
-                    <li className="badge badge-light">Forks: 25</li>
-                    </ul>
-                </div>
-                </div>
-                <div className="repo bg-white p-1 my-1">
-                <div>
-                    <h4><a href="#" target="_blank"
-                        rel="noopener noreferrer">Repo Two</a></h4>
-                    <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Repellat, laborum!
-                    </p>
-                </div>
-                <div>
-                    <ul>
-                    <li className="badge badge-primary">Stars: 44</li>
-                    <li className="badge badge-dark">Watchers: 21</li>
-                    <li className="badge badge-light">Forks: 25</li>
-                    </ul>
-                </div>
-                </div>
+                {profile.education.length > 0 ? profile.education.map(edj => {
+                    return (
+                        <div>
+                            <h3>{edj.school}</h3>
+                            <p>{edj.from.split('T')[0]} - {edj.current ? 'Current' : edj.to.split('T')[0]}</p>
+                            <p><strong>Degree: </strong>{edj.degree}</p>
+                            <p><strong>Field Of Study: </strong>{edj.fieldofstudy}</p>
+                            <p>
+                            {edj.description !== '' ? (
+                                    <Fragment>
+                                        <strong>Description: </strong>{edj.description}
+                                    </Fragment>
+                                    
+                                ) : 'No Description Available'}
+                            </p>
+                        </div>
+                    )
+                }) : 'No Education Available'}
+                
             </div>
             </div>
         </Fragment>
-    )
+    ) : <Spinner />
 }
 
-export default Profile
+const mapStateToProps = state => ({
+    profile: state.profile.profile,
+    auth: state.auth
+})
+
+export default connect(mapStateToProps, { getProfileByUserId })(Profile)
