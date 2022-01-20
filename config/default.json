@@ -1,5 +1,5 @@
 {
-    "mongoURI": "mongodb+srv://amank23:Ammijaan123@devconnector.il55c.mongodb.net/devConnector?retryWrites=true&w=majority",
+    "mongoURI": "mongodb+srv://amank23:Abcd1234@devconnector.il55c.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
     "jwtToken": "mysecrettoken",
     "githubClientId": "a332d3cf647a3e6532c3",
     "githubSecret": "b1ccc689b9ed4def61774c5f5123fff538715b36"

@@ -19,6 +19,13 @@ app.use('/api/profile', require('./routes/api/profile'));
 app.use('/api/posts', require('./routes/api/posts'));
 
 
+require("dotenv").config()
+
+const path = require("path")
 const PORT = process.env.PORT || 5000;
+
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+});
 
 app.listen(PORT, () => console.log(`Server has started on PORT ${PORT}`));
