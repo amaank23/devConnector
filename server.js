@@ -9,7 +9,7 @@ connectDB();
 //init Middleware
 app.use(express.json({ extended: false }));
 
-app.get('/', (req, res) => res.send('API Running'));
+// app.get('/', (req, res) => res.send('API Running'));
 
 
 // Define Routes
@@ -29,5 +29,6 @@ app.use(express.static(path.join(__dirname, "client", "build")))
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });
+
 
 app.listen(PORT, () => console.log(`Server has started on PORT ${PORT}`));
